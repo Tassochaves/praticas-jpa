@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dev.praticas_jpa.dao.AutorDAO;
 import com.dev.praticas_jpa.entity.Autor;
+import com.dev.praticas_jpa.entity.InforAutor;
 
 @RestController
 @RequestMapping("autores")
@@ -62,5 +63,16 @@ public class AutorController {
     @GetMapping("total-de-autores")
     public Long retornaTotalDeAutores(){
         return autorDAO.buscarTotalDeAutor();
+    }
+
+    @PutMapping("{id}/infor")
+    public Autor salvarInfoAutor(@PathVariable Long id, @RequestBody InforAutor inforAutor){
+        return autorDAO.salvarInfoAutor(inforAutor, id);
+    }
+
+    
+    @GetMapping("infor")
+    public List<Autor> buscaAutoresPorCargo(@RequestParam String cargo){
+        return autorDAO.buscarPorCargo(cargo);
     }
 }

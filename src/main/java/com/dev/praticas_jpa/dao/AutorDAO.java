@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.praticas_jpa.entity.Autor;
+import com.dev.praticas_jpa.entity.InforAutor;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -58,5 +59,26 @@ public class AutorDAO {
         String query = "SELECT COUNT(1) FROM Autor a";
         return this.manager.createQuery(query, Long.class).getSingleResult();
 
+    }
+
+    @Transactional(readOnly = false)
+    public Autor salvarInfoAutor(InforAutor inforAutor, Long autorId){
+         Autor autor = buscarPorId(autorId);
+         autor.setInforAutor(inforAutor);
+
+         return autor;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Autor> buscarPorCargo(String cargo){
+        
+        String query = """
+                SELECT a FROM Autor a
+                WHERE a.inforAutor.cargo LIKE :cargo
+                ORDER BY a.nome ASC
+                """;
+        
+        return this.manager.createQuery(query, Autor.class)
+            .setParameter("cargo", "%" + cargo + "%").getResultList();
     }
 }

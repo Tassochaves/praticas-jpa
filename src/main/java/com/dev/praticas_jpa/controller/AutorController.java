@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dev.praticas_jpa.dao.AutorDAO;
 import com.dev.praticas_jpa.entity.Autor;
 import com.dev.praticas_jpa.entity.InforAutor;
+import com.dev.praticas_jpa.projection.AutorInfoProjection;
 
 @RestController
 @RequestMapping("autores")
@@ -74,5 +75,10 @@ public class AutorController {
     @GetMapping("infor")
     public List<Autor> buscaAutoresPorCargo(@RequestParam String cargo){
         return autorDAO.buscarPorCargo(cargo);
+    }
+
+    @GetMapping("autor-infor")
+    public AutorInfoProjection buscaAutorInforPorId(@RequestParam Long id){
+        return autorDAO.buscarAutorInforPorId(id);
     }
 }

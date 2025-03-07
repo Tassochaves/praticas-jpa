@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.praticas_jpa.entity.Autor;
 import com.dev.praticas_jpa.entity.InforAutor;
+import com.dev.praticas_jpa.projection.AutorInfoProjection;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -80,5 +81,18 @@ public class AutorDAO {
         
         return this.manager.createQuery(query, Autor.class)
             .setParameter("cargo", "%" + cargo + "%").getResultList();
+    }
+
+    @Transactional(readOnly = true)
+    public AutorInfoProjection buscarAutorInforPorId(Long id){
+        
+        String query = """
+                SELECT new AutorInfoProjection(a.nome, a.sobrenome, a.inforAutor.cargo, a.inforAutor.bio)
+                FROM Autor a    
+                WHERE a.id = :id
+                """;
+        
+        return this.manager.createQuery(query, AutorInfoProjection.class)
+            .setParameter("id", id).getSingleResult();
     }
 }
